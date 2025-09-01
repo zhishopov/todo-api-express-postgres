@@ -40,7 +40,7 @@ router.get("/:id", async (req, res) => {
     const id = Number(req.params.id);
 
     if (isNaN(id)) {
-      return res.status(400).json({ error: "Server error" });
+      return res.status(400).json({ error: "Invalid id" });
     }
 
     const result = await pool.query("SELECT * FROM todos WHERE id = $1;", [id]);
@@ -48,7 +48,7 @@ router.get("/:id", async (req, res) => {
     res.json(result.rows[0]);
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -59,11 +59,11 @@ router.put("/:id", async (req, res) => {
     const { task, completed } = req.body;
 
     if (isNaN(id)) {
-      return res.status(400).json({ error: "Server error" });
+      return res.status(400).json({ error: "Invalid id" });
     }
 
     if (task.length === 0 || typeof completed !== "boolean") {
-      return res.status(400);
+      return res.status(400).json({ error: "Task and completed are required" });
     }
 
     const result = await pool.query(
@@ -84,7 +84,7 @@ router.delete("/:id", async (req, res) => {
     const id = Number(req.params.id);
 
     if (isNaN(id)) {
-      return res.status(400);
+      return res.status(400).json({ error: "Invalid id" });
     }
 
     const result = await pool.query(
