@@ -77,3 +77,26 @@ router.put("/:id", async (req, res) => {
     res.status(500);
   }
 });
+
+// Delete todo
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      return res.status(400);
+    }
+
+    const result = await pool.query(
+      "DELETE FROM todos WHERE id = $1 RETURNING id;",
+      [id]
+    );
+
+    res.status(204).send();
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+});
+
+export default router;
