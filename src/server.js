@@ -3,6 +3,7 @@ import router from "./todos.routes.js";
 
 const app = express();
 
+app.use(express.json());
 app.use("/todos", router);
 
 app.listen(5000, () =>
