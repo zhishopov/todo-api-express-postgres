@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
     res.json(result.rows);
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -40,7 +40,7 @@ router.get("/:id", async (req, res) => {
     const id = Number(req.params.id);
 
     if (isNaN(id)) {
-      return res.status(400);
+      return res.status(400).json({ error: "Server error" });
     }
 
     const result = await pool.query("SELECT * FROM todos WHERE id = $1;", [id]);
@@ -56,10 +56,10 @@ router.get("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const { text, completed } = req.body;
+    const { task, completed } = req.body;
 
     if (isNaN(id)) {
-      return res.status(400);
+      return res.status(400).json({ error: "Server error" });
     }
 
     if (task.length === 0 || typeof completed !== "boolean") {
@@ -74,7 +74,7 @@ router.put("/:id", async (req, res) => {
     res.json(res.rows[0]);
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -95,7 +95,7 @@ router.delete("/:id", async (req, res) => {
     res.status(204).send();
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
