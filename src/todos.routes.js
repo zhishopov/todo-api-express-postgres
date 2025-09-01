@@ -4,7 +4,7 @@ import { pool } from "./database.js";
 const router = Router();
 
 // Create todo
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const {task} = req.body;
         
@@ -13,10 +13,20 @@ router.post('/', (req, res) => {
         }
 
         const result = await pool.query('INSERT INTO todos (task) VALUES ($1) RETURNING *;', [task]);
-
+        res.status(201).json(result.rows[0]);
     } catch (error) {
         console.log(error);
         res.status(500);
     }
 })
 
+// Get All
+router.get('/', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM todos;');
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error);
+        res.status(500);
+    }
+})
