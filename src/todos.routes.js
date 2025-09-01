@@ -71,7 +71,7 @@ router.put("/:id", async (req, res) => {
       [task, completed, id]
     );
 
-    res.json(res.rows[0]);
+    res.json(result.rows[0]);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });
